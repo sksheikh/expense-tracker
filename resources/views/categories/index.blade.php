@@ -32,7 +32,7 @@
                                         {{ $category->expenses->count() }} expenses
                                     </div>
                                     <div class="text-sm text-gray-700 mb-4">
-                                        Total: ${{ number_format($category->expenses->sum('amount'), 2) }}
+                                        Total: {{ number_format($category->expenses->sum('amount'), 2) }} BDT
                                     </div>
                                     <div class="flex justify-end space-x-2">
                                         <a href="{{ route('categories.edit', $category) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
