@@ -1,21 +1,22 @@
 <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <div class="px-6 py-5 border-b border-gray-100">
-        <h3 class="text-lg font-semibold text-gray-800">Monthly Expense Trends</h3>
-        <p class="text-sm text-gray-500">Your spending patterns over time</p>
+        <h3 class="text-lg font-semibold text-gray-800">Monthly Expenses</h3>
+        <p class="text-sm text-gray-500">Last 6 months of spending</p>
     </div>
     <div class="p-6">
-        <canvas id="monthlyTrendsChart" height="300"></canvas>
+        <canvas id="monthlyChart" height="300">
+        </canvas>
     </div>
 </div>
+{{-- @dd($monthlyExpenses) --}}
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('monthlyTrendsChart').getContext('2d');
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
 
     // Sample data - replace with your actual data from the backend
     const monthlyData = @json($monthlyExpenses);
-
     const chart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -54,7 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     callbacks: {
                         label: function(context) {
-                            return '$' + parseFloat(context.raw).toFixed(2);
+                            console.log(context)
+                            // return '৳' + parseFloat(context.raw).toFixed(2);
+                            return '৳' + parseFloat(context.raw).toLocaleString(undefined, { minimumFractionDigits: 2 });
                         }
                     }
                 }
@@ -64,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     beginAtZero: true,
                     ticks: {
                         callback: function(value) {
-                            return '$' + value;
+                            // return '৳' + value;
+                            return '৳' + value.toLocaleString();
                         },
                         font: {
                             size: 11
