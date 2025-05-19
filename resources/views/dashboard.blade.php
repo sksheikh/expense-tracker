@@ -33,7 +33,7 @@
                     <div class="mt-4 md:mt-0">
                         <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg px-4 py-3 text-white">
                             <p class="text-sm font-medium text-blue-100">Current Month Total</p>
-                            <p class="text-2xl font-bold">${{ number_format($currentMonthTotal, 2) }}</p>
+                            <p class="text-2xl font-bold">{{ config('constants.currency') }} {{ number_format($currentMonthTotal, 2) }}</p>
                             @if($previousMonthTotal > 0)
                                 @php
                                     $percentChange = (($currentMonthTotal - $previousMonthTotal) / $previousMonthTotal) * 100;
@@ -70,7 +70,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-500">Previous Month</p>
-                                <p class="text-2xl font-semibold text-gray-800">${{ number_format($previousMonthTotal, 2) }}</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ config('constants.currency') }} {{ number_format($previousMonthTotal, 2) }}</p>
                             </div>
                         </div>
                     </div>
@@ -123,16 +123,7 @@
             <!-- Charts Row -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- Monthly Expenses Chart -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="px-6 py-5 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800">Monthly Expenses</h3>
-                        <p class="text-sm text-gray-500">Last 6 months of spending</p>
-                    </div>
-                    <div class="p-6">
-                        <canvas id="monthlyChart" height="300">
-                        </canvas>
-                    </div>
-                </div>
+               @include('charts.monthly_expense')
 
                 <!-- Category Breakdown Chart -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">

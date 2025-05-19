@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@app.com',
-            'password' => 'sheikh@1140'
+            'password' => 'password'
         ]);
-        
+
         $this->call([
             CategorySeeder::class
         ]);
