@@ -1,37 +1,22 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "api/build.sh",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "public"
-            }
-        },
-        {
-            "src": "api/index.php",
-            "use": "vercel-php@0.6.0"
-        }
-    ],
+    "framework": null,
+    "functions": {
+      "api/index.php": { "runtime": "vercel-php@0.6.0" }
+    },
     "routes": [
-        {
-            "src": "/(css|js|images|fonts|favicon|assets|build)/(.*)",
-            "dest": "public/$1/$2"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/api/index.php"
-        }
+      { "src": "/(.*)", "dest": "/api/index.php" }
     ],
     "env": {
-        "APP_CONFIG_CACHE": "/tmp/config.php",
-        "APP_EVENTS_CACHE": "/tmp/events.php",
-        "APP_PACKAGES_CACHE": "/tmp/packages.php",
-        "APP_ROUTES_CACHE": "/tmp/routes.php",
-        "APP_SERVICES_CACHE": "/tmp/services.php",
-        "VIEW_COMPILED_PATH": "/tmp",
-        "CACHE_DRIVER": "array",
-        "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie"
+      "APP_ENV": "production",
+      "APP_DEBUG": "false",
+      "APP_URL": "https://expense-tracker.example.vercel.app",
+      "APP_KEY": "base64:2LRzLzcQ+N95v2G89HIcnwZNGFA/HjW27HwPTIfOLrg=",
+      "APP_CONFIG_CACHE": "/tmp/config.php",
+      "APP_ROUTES_CACHE": "/tmp/routes.php",
+      "VIEW_COMPILED_PATH": "/tmp",
+      "CACHE_DRIVER": "array",
+      "SESSION_DRIVER": "cookie",
+      "LOG_CHANNEL": "stderr"
     }
-}
+  }
