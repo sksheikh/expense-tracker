@@ -24,7 +24,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Welcome Card -->
-            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg mb-6 overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-800 to-black rounded-lg shadow-lg mb-6 overflow-hidden">
                 <div class="px-6 py-8 md:flex md:items-center md:justify-between">
                     <div class="text-white">
                         <h2 class="text-2xl font-bold">Welcome{{ isset(Auth::user()->name) ? ', ' . Auth::user()->name : '' }}!</h2>
