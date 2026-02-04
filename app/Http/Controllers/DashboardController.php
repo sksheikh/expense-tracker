@@ -56,12 +56,36 @@ class DashboardController extends Controller
                 ];
             });
 
+        // Get total income for the current month
+        $currentMonthIncome = $user->incomes()
+            ->whereMonth('date', Carbon::now()->month)
+            ->whereYear('date', Carbon::now()->year)
+            ->sum('amount');
+
+        // Net Balance (Income - Expense)
+        $netBalance = $currentMonthIncome - $currentMonthTotal;
+
+        // Pending Loans
+        $pendingLoansGiven = $user->loans()
+            ->where('type', 'given')
+            ->where('is_settled', false)
+            ->sum('amount');
+
+        $pendingLoansTaken = $user->loans()
+            ->where('type', 'taken')
+            ->where('is_settled', false)
+            ->sum('amount');
+
         return view('dashboard', compact(
             'currentMonthTotal',
             'previousMonthTotal',
             'expensesByCategory',
             'recentExpenses',
-            'monthlyExpenses'
+            'monthlyExpenses',
+            'currentMonthIncome',
+            'netBalance',
+            'pendingLoansGiven',
+            'pendingLoansTaken'
         ));
     }
 }

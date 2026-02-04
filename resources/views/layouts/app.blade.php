@@ -14,23 +14,27 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased text-gray-900 bg-gray-100">
+        <div x-data="{ sidebarOpen: false }" class="h-screen flex bg-gray-100 overflow-hidden">
+            
+            <!-- Mobile Sidebar Overlay -->
+            <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"></div>
+            
+            <!-- Sidebar -->
+            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-50 w-64 bg-black text-white transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 flex-shrink-0">
+                @include('layouts.sidebar')
+            </div>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col h-full overflow-hidden">
+                <!-- Topbar -->
+                @include('layouts.topbar')
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+                <!-- Page Content -->
+                <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+                    {{ $slot }}
+                </main>
+            </div>
         </div>
 
         @stack("scripts")

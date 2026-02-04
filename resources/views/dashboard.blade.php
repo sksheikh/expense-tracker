@@ -1,26 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Dashboard') }}
             </h2>
-            <div class="mt-3 md:mt-0 flex space-x-2">
-                <a href="{{ route('expenses.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Add Expense
-                </a>
-                <a href="{{ route('categories.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
-                    Add Category
-                </a>
-            </div>
         </div>
     </x-slot>
-
+    
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Welcome Card -->
@@ -30,35 +16,25 @@
                         <h2 class="text-2xl font-bold">Welcome{{ isset(Auth::user()->name) ? ', ' . Auth::user()->name : '' }}!</h2>
                         <p class="mt-1 text-blue-100">Here's an overview of your expenses.</p>
                     </div>
-                    <div class="mt-4 md:mt-0">
+                    <div class="mt-4 md:mt-0 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full md:w-auto">
                         <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg px-4 py-3 text-white">
-                            <p class="text-sm font-medium text-blue-100">Current Month Total</p>
+                            <p class="text-sm font-medium text-green-100">Income (Month)</p>
+                            <p class="text-2xl font-bold">{{ config('constants.currency') }} {{ number_format($currentMonthIncome, 2) }}</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg px-4 py-3 text-white">
+                            <p class="text-sm font-medium text-red-100">Expense (Month)</p>
                             <p class="text-2xl font-bold">{{ config('constants.currency') }} {{ number_format($currentMonthTotal, 2) }}</p>
-                            @if($previousMonthTotal > 0)
-                                @php
-                                    $percentChange = (($currentMonthTotal - $previousMonthTotal) / $previousMonthTotal) * 100;
-                                @endphp
-                                <div class="flex items-center mt-1">
-                                    @if($percentChange > 0)
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                        </svg>
-                                        <span class="ml-1 text-sm text-red-300">{{ number_format(abs($percentChange), 1) }}% from last month</span>
-                                    @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-                                        </svg>
-                                        <span class="ml-1 text-sm text-green-300">{{ number_format(abs($percentChange), 1) }}% from last month</span>
-                                    @endif
-                                </div>
-                            @endif
+                        </div>
+                         <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-lg px-4 py-3 text-white">
+                            <p class="text-sm font-medium text-blue-100">Balance</p>
+                            <p class="text-2xl font-bold">{{ config('constants.currency') }} {{ number_format($netBalance, 2) }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                 <!-- Previous Month Card -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                     <div class="p-6">
@@ -96,6 +72,46 @@
                     </div>
                     <div class="bg-gray-50 px-6 py-3">
                         <a href="{{ route('categories.index') }}" class="text-sm text-green-600 hover:text-green-800 font-medium">Manage categories →</a>
+                    </div>
+                </div>
+
+                <!-- Loan Given Card -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-blue-100 text-blue-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">Owed to You</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ config('constants.currency') }} {{ number_format($pendingLoansGiven, 2) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-3">
+                        <a href="{{ route('loans.index') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">View details →</a>
+                    </div>
+                </div>
+
+                <!-- Loan Taken Card -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 rounded-full bg-red-100 text-red-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">You Owe</p>
+                                <p class="text-2xl font-semibold text-gray-800">{{ config('constants.currency') }} {{ number_format($pendingLoansTaken, 2) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-3">
+                        <a href="{{ route('loans.index') }}" class="text-sm text-red-600 hover:text-red-800 font-medium">View details →</a>
                     </div>
                 </div>
 
